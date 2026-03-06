@@ -1,4 +1,4 @@
-# Terminal of Knowledge
+# Game Wiki Terminal  
 
 A terminal-style web app for uploading course materials (PDF, TXT, MD, DOCX) and asking questions grounded strictly in the uploaded content. Answers include citations with filename and page number, expandable source snippets, and related concept suggestions.
 

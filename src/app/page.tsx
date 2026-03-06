@@ -32,7 +32,7 @@ export default function Home() {
     {
       role: "system",
       content:
-            'Terminal of Knowledge v1.0\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAsk questions, upload files, paste text, or run commands.\nSupported formats: PDF, TXT, MD, DOCX\n\nType "help" for available commands.',}
+  'Game Wiki Terminal v1.0\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAsk about quests, items, NPCs, maps, and builds.\nUpload sources or ingest wiki pages.\n\nType "help" for available commands.',}
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -161,19 +161,23 @@ export default function Home() {
       if (trimmed.toLowerCase() === "help") {
         addMessage({
           role: "system",
-          content: `Available commands:
-          upload                 - Upload files
-          paste                  - Paste text for ingestion
-          clear                  - Clear terminal
-          help                   - Show this help message
-          sources                - List uploaded sources
-          explain <topic>        - Explain a topic from sources
-          summarize <topic>      - Summarize a topic from sources
-          quiz me on <topic>     - Generate a quiz question
-          learn: <text>          - Save knowledge directly
-          ingest <url>           - Ingest a webpage into the library
+         content: `Available commands:
+            upload                   - Upload source files
+            paste                    - Paste source text
+            clear                    - Clear terminal
+            help                     - Show this help message
+            sources                  - List indexed sources
+            explain <topic>          - Explain a game topic
+            summarize <topic>        - Summarize a game topic
+            quiz me on <topic>       - Generate a quiz question
+            learn: <text>            - Save knowledge directly
+            ingest <url>             - Ingest a wiki/web page
+            /game <name>             - Set current game context (later)
 
-        Or just type a question.`,
+          Examples:
+            explain stamina damage
+            summarize nucal intro quest
+            ingest https://example.com/wiki/quest-page`,
         });
         return;
       }
@@ -235,7 +239,7 @@ export default function Home() {
             className="ml-4 text-sm"
             style={{ color: "var(--fg-dim)" }}
           >
-            terminal-of-knowledge
+            game-wiki-terminal
           </span>
         </div>
 

@@ -7,9 +7,9 @@ const vt323 = VT323({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Terminal of Knowledge",
-  description: "Retro CRT knowledge interface",
+export const metadata = {
+  title: "Game Wiki Terminal",
+  description: "A command-line wiki for quests, items, maps, and game systems.",
 };
 
 export default function RootLayout({

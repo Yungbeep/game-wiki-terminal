@@ -149,22 +149,22 @@ export default function BootGate({ children, alwaysPlay = true }: BootGateProps)
     ensureAudio();
     humStart();
 
-    appendLine("TERMINAL OF KNOWLEDGE");
-    appendLine("---------------------");
+    appendLine("GAME WIKI TERMINAL");
+    appendLine("-------------------");
     appendLine("");
 
     await sleep(220);
-    await typeLine("Initializing system...", { speed: 12, keySound: false });
+    await typeLine("Initializing Game Wiki Terminal...", { speed: 12, keySound: false });
     blip();
 
     await sleep(220);
-    await typeLine("Connection detected.", { speed: 11, keySound: false });
+    await typeLine("Loading game knowledge index...", { speed: 11, keySound: false });
 
     const { lang, tz } = localeGuess();
     const device = uaDevice();
 
     await sleep(160);
-    await typeLine("Collecting session metadata...", { speed: 10, keySound: false });
+    await typeLine("Preparing quest, item, and lore systems...", { speed: 10, keySound: false });
 
     await sleep(120);
     glitchOnce();
@@ -194,7 +194,7 @@ export default function BootGate({ children, alwaysPlay = true }: BootGateProps)
 
     await sleep(130);
     try {
-      const u = new SpeechSynthesisUtterance("What would you like to know?");
+      const u = new SpeechSynthesisUtterance("Game Wiki Terminal ready. Welcome, user.");
       u.rate = 0.92;
       u.pitch = 0.9;
       u.volume = 0.55;
@@ -324,7 +324,7 @@ export default function BootGate({ children, alwaysPlay = true }: BootGateProps)
           <div style={{ width: 9, height: 9, borderRadius: 999, background: "rgba(215, 251, 232, 0.28)" }} />
           <div style={{ width: 9, height: 9, borderRadius: 999, background: "rgba(215, 251, 232, 0.28)" }} />
           <div style={{ fontSize: 12, color: "rgba(215, 251, 232, 0.65)", marginLeft: 8, letterSpacing: "0.08em", textTransform: "uppercase" }}>
-            terminal-of-knowledge
+            game-wiki-terminal
           </div>
 
           <div style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
