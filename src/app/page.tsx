@@ -219,21 +219,21 @@ export default function Home() {
         <div
           className="flex items-center gap-2 px-4 py-2 rounded-t-lg"
           style={{
-            background: "#1a2e1a",
+            background: "rgba(0,0,0,0.35)",
             borderBottom: "1px solid var(--border)",
           }}
         >
           <span
             className="w-3 h-3 rounded-full"
-            style={{ background: "#ff5f56" }}
+            style={{ background: "rgba(215, 251, 232, 0.28)" }}
           />
           <span
             className="w-3 h-3 rounded-full"
-            style={{ background: "#ffbd2e" }}
+            style={{ background: "rgba(215, 251, 232, 0.28)" }}
           />
           <span
             className="w-3 h-3 rounded-full"
-            style={{ background: "#27c93f" }}
+            style={{ background: "rgba(215, 251, 232, 0.28)" }}
           />
           <span
             className="ml-4 text-sm"

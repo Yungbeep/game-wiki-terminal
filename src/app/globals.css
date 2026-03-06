@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #0c0c0c;
-  --fg: #00ff41;
-  --fg-dim: #00cc33;
-  --fg-muted: #008822;
-  --accent: #00ff41;
-  --error: #ff3333;
-  --border: #1a3a1a;
-  --surface: #111611;
+  --bg: #050607;
+  --fg: #d7fbe8;
+  --fg-dim: rgba(215, 251, 232, 0.82);
+  --fg-muted: rgba(215, 251, 232, 0.55);
+  --accent: #d7fbe8;
+  --error: #ff6b6b;
+  --border: rgba(215, 251, 232, 0.16);
+  --surface: rgba(0, 0, 0, 0.35);
 
-  --crt-bg: #04110a;
-  --crt-bg-deep: #020804;
-  --crt-green: #4dff74;
-  --crt-green-soft: rgba(77, 255, 116, 0.7);
-  --crt-border: #2cff66;
-  --crt-shadow: rgba(44, 255, 102, 0.35);
+  --crt-bg: #050607;
+  --crt-bg-deep: #040505;
+  --crt-green: #d7fbe8;
+  --crt-green-soft: rgba(215, 251, 232, 0.45);
+  --crt-border: rgba(215, 251, 232, 0.16);
+  --crt-shadow: rgba(215, 251, 232, 0.16);
 }
 
 html,
@@ -26,7 +26,10 @@ body {
 }
 
 body {
-  background: radial-gradient(circle at center, #220909 0%, #120404 45%, #070202 100%);
+  background:
+    radial-gradient(1200px 600px at 20% 0%, rgba(215, 251, 232, 0.05), transparent 60%),
+    radial-gradient(800px 400px at 80% 100%, rgba(215, 251, 232, 0.03), transparent 55%),
+    #050607;
   color: var(--fg);
   min-height: 100vh;
 }
@@ -35,9 +38,11 @@ body {
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--bg);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--fg-muted);
   border-radius: 3px;
@@ -45,18 +50,31 @@ body {
 
 /* Terminal cursor blink */
 @keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
 }
+
 .cursor-blink {
   animation: blink 1s infinite;
 }
 
 /* Glow effect */
 @keyframes glow {
-  0%, 100% { text-shadow: 0 0 4px #00ff4180; }
-  50% { text-shadow: 0 0 8px #00ff41b0; }
+  0%,
+  100% {
+    text-shadow: 0 0 4px rgba(215, 251, 232, 0.35);
+  }
+  50% {
+    text-shadow: 0 0 8px rgba(215, 251, 232, 0.55);
+  }
 }
+
 .text-glow {
   animation: glow 2s ease-in-out infinite;
 }
@@ -75,15 +93,15 @@ body {
   min-height: 620px;
   color: var(--crt-green);
   background:
-    radial-gradient(circle at 50% 45%, rgba(30, 120, 50, 0.16), transparent 45%),
-    linear-gradient(180deg, #07160c 0%, #041008 100%);
-  border: 3px solid rgba(28, 255, 100, 0.35);
+    radial-gradient(circle at 50% 45%, rgba(215, 251, 232, 0.06), transparent 45%),
+    linear-gradient(180deg, #080909 0%, #050607 100%);
+  border: 3px solid var(--crt-border);
   border-radius: 22px;
   box-shadow:
-    0 0 10px rgba(44, 255, 102, 0.25),
-    0 0 40px rgba(44, 255, 102, 0.14),
-    inset 0 0 30px rgba(44, 255, 102, 0.1),
-    inset 0 0 120px rgba(44, 255, 102, 0.06);
+    0 0 10px rgba(215, 251, 232, 0.1),
+    0 0 40px rgba(215, 251, 232, 0.08),
+    inset 0 0 30px rgba(215, 251, 232, 0.05),
+    inset 0 0 120px rgba(215, 251, 232, 0.03);
   overflow: hidden;
   padding: 18px 18px 14px;
 }
@@ -92,8 +110,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 2px solid rgba(77, 255, 116, 0.45);
-  background: rgba(77, 255, 116, 0.08);
+  border: 2px solid var(--crt-border);
+  background: rgba(215, 251, 232, 0.05);
   padding: 6px 10px;
   margin-bottom: 14px;
   text-shadow:
@@ -144,7 +162,7 @@ body {
   letter-spacing: 0.02em;
   text-shadow:
     0 0 4px var(--crt-green),
-    0 0 12px rgba(77, 255, 116, 0.35);
+    0 0 12px rgba(215, 251, 232, 0.18);
 }
 
 .crt-line {
@@ -166,7 +184,7 @@ body {
   text-shadow:
     0 0 8px var(--crt-green),
     0 0 20px var(--crt-green),
-    0 0 40px rgba(77, 255, 116, 0.4);
+    0 0 40px rgba(215, 251, 232, 0.2);
 }
 
 .crt-spacer {
@@ -184,8 +202,8 @@ body {
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
-  border: 2px solid rgba(77, 255, 116, 0.45);
-  background: rgba(77, 255, 116, 0.08);
+  border: 2px solid var(--crt-border);
+  background: rgba(215, 251, 232, 0.05);
   padding: 4px 10px;
   font-size: 1.4rem;
   text-shadow:
@@ -230,11 +248,21 @@ body {
 }
 
 @keyframes crtBlink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes crtFlicker {
-  from { opacity: 0.03; }
-  to { opacity: 0.07; }
+  from {
+    opacity: 0.03;
+  }
+  to {
+    opacity: 0.07;
+  }
 }
