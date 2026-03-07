@@ -27,7 +27,7 @@ interface Message {
 
 
 export default function Home() {
-  
+  const [gameSlug, setGameSlug] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "system",
@@ -151,6 +151,73 @@ export default function Home() {
     [addMessage]
   );
 
+  const handleWikiIngest = useCallback(
+    async (slug: string, url: string) => {
+      setIsLoading(true);
+      addMessage({ role: "user", content: `> wiki ingest ${url}` });
+      try {
+        const res = await fetch("/api/wiki/ingest", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ gameSlug: slug, url }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          addMessage({ role: "system", content: `ERROR: ${data.error}` });
+        } else if (data.skipped) {
+          addMessage({
+            role: "system",
+            content: `Page already ingested (unchanged): ${data.page.title} [${data.page.pageType}]`,
+          });
+        } else {
+          addMessage({
+            role: "system",
+            content: `Wiki page ingested: ${data.page.title}\n  Type: ${data.page.pageType}\n  Sections: ${data.sectionsInserted}\n  Entities: ${data.entitiesUpserted}`,
+          });
+        }
+      } catch {
+        addMessage({ role: "system", content: "ERROR: Failed to ingest wiki page." });
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [addMessage]
+  );
+
+  const handleWikiSearch = useCallback(
+    async (query: string) => {
+      setIsLoading(true);
+      addMessage({ role: "user", content: `> wiki search ${query}` });
+      try {
+        const res = await fetch("/api/wiki/search", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query, gameSlug: gameSlug || undefined }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          addMessage({ role: "system", content: `ERROR: ${data.error}` });
+        } else if (!data.results || data.results.length === 0) {
+          addMessage({ role: "system", content: "No wiki results found." });
+        } else {
+          const lines = data.results.slice(0, 5).map(
+            (r: { pageTitle: string; pageType: string; heading: string | null; content: string; similarity: number }) =>
+              `[${r.pageType}] ${r.pageTitle}${r.heading ? ` > ${r.heading}` : ""}\n  ${r.content.slice(0, 200)}${r.content.length > 200 ? "..." : ""}\n  (${Math.round(r.similarity * 100)}% match)`
+          );
+          addMessage({
+            role: "system",
+            content: `Wiki results (${data.matchType} match):\n\n${lines.join("\n\n")}`,
+          });
+        }
+      } catch {
+        addMessage({ role: "system", content: "ERROR: Failed to search wiki." });
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [addMessage, gameSlug]
+  );
+
   const handleSubmit = useCallback(
     (e: FormEvent) => {
       e.preventDefault();
@@ -172,12 +239,17 @@ export default function Home() {
             quiz me on <topic>       - Generate a quiz question
             learn: <text>            - Save knowledge directly
             ingest <url>             - Ingest a wiki/web page
-            /game <name>             - Set current game context (later)
+
+          Wiki commands:
+            /game <name>             - Set current game context
+            wiki ingest <url>        - Ingest a structured wiki page
+            wiki search <query>      - Search the wiki database
 
           Examples:
-            explain stamina damage
-            summarize nucal intro quest
-            ingest https://example.com/wiki/quest-page`,
+            /game marathon
+            wiki ingest https://example.com/wiki/quest-page
+            wiki search first quest
+            explain stamina damage`,
         });
         return;
       }
@@ -194,9 +266,44 @@ export default function Home() {
         return;
       }
 
+      // /game <slug> - set game context
+      const gameMatch = trimmed.match(/^\/game\s+(.+)/i);
+      if (gameMatch) {
+        const slug = gameMatch[1].trim().toLowerCase().replace(/\s+/g, "-");
+        setGameSlug(slug);
+        addMessage({
+          role: "system",
+          content: `Game context set to: ${slug}\nWiki commands will now filter by this game.`,
+        });
+        return;
+      }
+
+      // wiki ingest <url> - structured wiki ingestion
+      const wikiIngestMatch = trimmed.match(/^wiki\s+ingest\s+(.+)/i);
+      if (wikiIngestMatch) {
+        const url = wikiIngestMatch[1].trim();
+        if (!gameSlug) {
+          addMessage({
+            role: "system",
+            content: 'Set a game context first with /game <name>\nExample: /game marathon',
+          });
+          return;
+        }
+        handleWikiIngest(gameSlug, url);
+        return;
+      }
+
+      // wiki search <query> - structured wiki search
+      const wikiSearchMatch = trimmed.match(/^wiki\s+search\s+(.+)/i);
+      if (wikiSearchMatch) {
+        const query = wikiSearchMatch[1].trim();
+        handleWikiSearch(query);
+        return;
+      }
+
       handleAsk(trimmed);
     },
-    [input, isLoading, addMessage, handleAsk]
+    [input, isLoading, addMessage, handleAsk, handleWikiIngest, handleWikiSearch, gameSlug]
   );
 
   const toggleSource = useCallback((idx: number) => {
