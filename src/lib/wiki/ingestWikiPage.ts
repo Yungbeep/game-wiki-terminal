@@ -60,6 +60,11 @@ export async function ingestWikiPage(params: {
     timeout: 30000,
   });
 
+  const contentType = res.headers["content-type"] || "";
+  if (!contentType.includes("text/html") && !contentType.includes("application/xhtml")) {
+    throw new Error(`Expected HTML but got ${contentType}`);
+  }
+
   const html = res.data as string;
 
   // 3. Normalize/canonicalize URL
@@ -67,6 +72,14 @@ export async function ingestWikiPage(params: {
 
   // 4. Clean and parse HTML
   const doc = normalizeHtml(html, url);
+
+  if (!doc.title) {
+    doc.title = new URL(url).pathname.split("/").filter(Boolean).pop() || "Untitled";
+  }
+
+  if (doc.sections.length === 0) {
+    throw new Error("Page produced no extractable content after cleaning");
+  }
 
   // 5. Compute checksum
   const checksum = crypto.createHash("sha256").update(doc.cleanText).digest("hex");
